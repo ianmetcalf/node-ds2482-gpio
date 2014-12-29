@@ -13,6 +13,13 @@
 
 exports.PIO_ACCESS_READ = 0xF5;
 
+exports.STATUS = {
+  PIOA_PIN: (1<<0),
+  PIOA_LATCH: (1<<1),
+  PIOB_PIN: (1<<2),
+  PIOB_LATCH: (1<<3)
+};
+
 
 
 /*
