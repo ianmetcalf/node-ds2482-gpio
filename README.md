@@ -23,7 +23,13 @@ io.init(function(err) {
   io.search(function(err, modules) {
     if (err) { throw err; }
     
-    console.log(modules); // Returns a list of found io modules
+    modules.forEach(function(module) {
+      module.write({PIOA: true}, function(err, resp) {
+        if (err) { throw err; }
+        
+        console.log(resp); // Returns the status of each module
+      });
+    });
   });
 });
 ```
@@ -41,14 +47,37 @@ Creates an io module instance
 - `rom` the ROM address of the module as a 16 character hex encoded string
 - `options.wire` an instance of [wire](https://github.com/ianmetcalf/node-ds2482)
 
-### sense.init(callback)
+### io.init(callback)
 Resets the bridge chip and any onewire devices connected to it
 
-### sense.search(callback)
+### io.search(callback)
 Searches the bus and returns a list of found io modules
 
 ```js
 [
-  <Sensor "3ae9f412000000a6">
+  <Module "3ae9f412000000a6">
 ]
+```
+
+### module.read(callback)
+Reads the current pin and latch state status of the module
+
+```js
+{
+  PIOA: {pin: false, latch: false},
+  PIOB: {pin: false, latch: false}
+}
+```
+
+### module.write(state, callback)
+Writes the latch state to the module and returns the current status
+
+- `state.PIOA` a flag to enable the output latch state of pin A
+- `state.PIOB` a flag to enable the output latch state of pin B
+
+```js
+{
+  PIOA: {pin: true, latch: true},
+  PIOB: {pin: false, latch: false}
+}
 ```
